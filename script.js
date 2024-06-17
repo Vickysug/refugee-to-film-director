@@ -2,7 +2,7 @@ class Example extends Phaser.Scene {
   constructor() {
       super('Example');
   }
-
+//start screen images
   preload() {
       this.load.image('sky', 'https://play.rosebud.ai/assets/hollywood.2.png?n5bZ');
       this.load.image('logo', 'https://play.rosebud.ai/assets/start.screen.image.png?2iKX');
@@ -13,50 +13,54 @@ class Example extends Phaser.Scene {
       document.title = "Refugee To Film Director";
 
       this.add.image(400, 300, 'sky');
-
+//particles - not used - changed image to clear
       const particles = this.add.particles('red');
       const emitter = particles.createEmitter({
           speed: 100,
           scale: { start: 1, end: 0 },
           blendMode: 'ADD',
       });
-
+      //bouncing image
       const logo = this.physics.add.image(400, 100, 'logo');
 
       logo.setVelocity(100, 200);
-      logo.setBounce(0.8, 0.8);
+      logo.setBounce(0.3, 0.3);
       logo.setCollideWorldBounds(true);
 
       emitter.startFollow(logo);
-
+      //Names of film directors
       this.add.text(15, 25, 'Refugee To Film Director', { font: 'bold 68px Ariel', fill: '#cf1322' });
       this.add.text(10, 150, 'Billy Wilder', { font: 'bold 20px Courier New', fill: '#000000' });
       this.add.text(170, 150, ' Robert Vas', { font: 'bold 20px Courier New', fill: '#000000' });
       this.add.text(85, 175, 'Fritz Lang', { font: 'bold 20px Courier New', fill: '#000000' });
       this.add.text(420, 220, '', { font: 'bold 20px Courier New', fill: '#000000' });
 
-      const startButton = this.add.text(500, 500, 'Proceed', { font: 'bold 40px Arial', fill: '#f5d50a' });
-      startButton.setInteractive();
+      //Proceed button
+      const proceedButton = this.add.text(500, 500, 'Proceed', { font: 'bold 40px Arial', fill: '#f5d50a' });
+      proceedButton.setInteractive();
 
-      startButton.on('pointerdown', () => {
-          console.log('Start Game button clicked');
+      proceedButton.on('pointerdown', () => {
+          console.log('Proceed button clicked');
           this.scene.start('AnotherScene');
       });
   }
 }
 
+//Scene 2 - information and game instrutions
 class AnotherScene extends Phaser.Scene {
   constructor() {
       super('AnotherScene');
   }
 
   create() {
-      const textLabel = this.add.text(20, 20, 'Rita Ora was born in Kosovo in 1990, during the Kosovo war.\n\n Her family left Kosovo for political reasons, due to persecution of Albanians initiated with the disintegration of Yugoslavia. \n They relocated to London, England in 1991, when Ora was a baby. She grew up in Notting Hill, in West London, and attended a performing arts school, Sylvia Young Theatre School. \n\n\n\n\n\n Help Rita become famous by collecting music awards for her. \n\n\n Drag all of the awards into the car before the timer expires to beat the game!', { font: 'bold 20px Courier New', fill: '#000002', wordWrap: { width: 760, useAdvancedWrap: true } });
+      const textLabel = this.add.text(20, 20, 'Billy Wilder. June 22, 1906 to March 27, 2002). Austrian-born. Moved to Hollywood in 1934.\n\n Received his first nomination for the Academy Award for Best Director with the film noir Double Indemnity (1944).\nRobert Vas 3 March 1931 to 10 April 1978. Born in Hungary. \n\n Came to England after the Hungarian uprising in 1956 \n\nMade a series of films for the BBC.\n\n Fritz Lang, December 5, 1890 to August 2, 1976). Austrian-born.  \n\n Moved to Hollywood in 1936.\n ', { font: 'bold 20px Courier New', fill: '#000002', wordWrap: { width: 760, useAdvancedWrap: true } });
 
-      const proceedButton = this.add.text(620, 540, 'Proceed', { font: 'bold 40px Arial', fill: '#000000' });
-      proceedButton.setInteractive();
+      console.log(textLabel);
 
-      proceedButton.on('pointerdown', () => {
+      const startButton = this.add.text(620, 540, 'Start Game', { font: 'bold 40px Arial', fill: '#000000' });
+      startButton.setInteractive();
+
+      startButton.on('pointerdown', () => {
           console.log('Proceed button clicked');
           this.scene.start('Filmmemory');
       });
@@ -78,16 +82,16 @@ class Filmmemory extends Phaser.Scene {
   }
 
   preload() {
-      this.load.image('background', 'https://play.rosebud.ai/assets/create%20a%20movie%20set%20background.png?7AhS');
-      this.load.image('card back', 'https://play.rosebud.ai/assets/card%20back.png?yXEi');
-      this.load.image('spaghetti', 'https://play.rosebud.ai/assets/create%20a%20clapperboard.png?x1fp');
-      this.load.image('cookie', 'https://play.rosebud.ai/assets/create%20a%20filmset%20camera.png?rvdL');
-      this.load.image('sub', 'https://play.rosebud.ai/assets/create%20a%20cinema%20screen.png?arBa');
-      this.load.image('sundae', 'https://play.rosebud.ai/assets/create%20a%20movie%20award.png?hRsN');
-      this.load.image('cup', 'https://play.rosebud.ai/assets/cup.png?4RtA');
-      this.load.image('pretzel', 'https://play.rosebud.ai/assets/pretzel.png?Zhaa');
-      this.load.image('fries', 'https://play.rosebud.ai/assets/fries.png?BNvB');
-      this.load.image('burger', 'https://play.rosebud.ai/assets/burger.png?RKnP');
+    this.load.image('background', 'https://play.rosebud.ai/assets/create%20a%20movie%20set%20background.png?7AhS');
+    this.load.image('card back', 'https://play.rosebud.ai/assets/Retro TV.png?rIrX');
+    this.load.image('spaghetti', 'https://play.rosebud.ai/assets/create%20a%20clapperboard.png?x1fp');
+    this.load.image('cookie', 'https://play.rosebud.ai/assets/create%20a%20filmset%20camera.png?rvdL');
+    this.load.image('sub', 'https://play.rosebud.ai/assets/megaphone.jpg?PgLS');
+    this.load.image('sundae', 'https://play.rosebud.ai/assets/camera.jpg?ZQmm');
+    this.load.image('cup', 'https://play.rosebud.ai/assets/create a camera film reel.png?aZ6y');
+    this.load.image('pretzel', 'https://play.rosebud.ai/assets/directors-chair.jpg?Z006');
+    this.load.image('fries', 'https://play.rosebud.ai/assets/retro microphone.png?NTHG');
+    this.load.image('burger', 'https://play.rosebud.ai/assets/camera2.jpg?HBZL');
   }
 
   create() {
