@@ -137,8 +137,8 @@ class Filmmemory extends Phaser.Scene {
         context.cardBackSprites = [];
         context.matchedPairs = 0;
 
-        var countdownUncovered = 15;
-        var countdownCovered = 45;
+        var countdownUncovered = 15; 
+        var countdownCovered = 45; 
 
         var countdownText = context.add.text(context.sys.canvas.width / 2, 10, 'Countdown: ' + countdownUncovered, { fontSize: '35px', fill: '#FFA500' });
         countdownText.setOrigin(0.5, 0);
@@ -146,7 +146,7 @@ class Filmmemory extends Phaser.Scene {
         var totalPairsMatchedText = context.add.text(context.sys.canvas.width / 2, countdownText.y + countdownText.height + 10, 'Total Pairs Matched: ', { fontSize: '20px', fill: '#8888FF', fontWeight: 'bold' });
         totalPairsMatchedText.setOrigin(0.5, 0);
         var totalMatchedPairsText = context.add.text(totalPairsMatchedText.x + totalPairsMatchedText.width / 2, totalPairsMatchedText.y, context.totalMatchedPairs, { fontSize: '20px', fill: '#8888FF', fontWeight: 'bold' });
-        totalMatchedPairsText.setOrigin(0, 0);
+        totalMatchedPairsText.setOrigin(0, 0); 
 
         var memorizeText = context.add.text(context.sys.canvas.width / 2, startY / 2, 'MEMORIZE MATCHING PAIRS', { fontSize: '40px', fill: '#ADD8E6', align: 'center' });
         memorizeText.setOrigin(0.5, 0.5);
@@ -155,8 +155,8 @@ class Filmmemory extends Phaser.Scene {
         clickPairsText.setOrigin(0.5, 0.5);
         clickPairsText.visible = false;
 
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 4; j++) {
+        for(let i = 0; i < 4; i++) {
+            for(let j = 0; j < 4; j++) {
                 let imageKey = images[i * 4 + j];
                 let image = context.add.image(startX + (context.cardSize + context.spacing) * j, startY + (context.cardSize + context.spacing) * i, imageKey);
 
@@ -170,86 +170,93 @@ class Filmmemory extends Phaser.Scene {
                 scale = context.cardSize / Math.max(cardBack.width, cardBack.height);
                 cardBack.setScale(scale);
 
+                cardBack.setInteractive();
+
+                cardBack.on('pointerdown', () => {
+                    if(context.clickedCards.length < 2 && !this.ignoreClicks) { // Ignore clicks if ignoreClicks is true
+                        cardBack.visible = false;
+                        context.clickedCards.push(cardBack);
+
+                        if(context.clickedCards.length === 2) {
+                            context.cardBackSprites.forEach(sprite => sprite.disableInteractive());
+
+                            if(context.clickedCards[0].getData('key') === context.clickedCards[1].getData('key')) {
+                                context.clickedCards = [];
+                                context.matchedPairs++;
+                                context.totalMatchedPairs++; 
+                                totalMatchedPairsText.setText(context.totalMatchedPairs); 
+
+                                context.cardBackSprites.forEach(sprite => sprite.setInteractive());
+
+                                if (context.matchedPairs === 8) {
+                                    context.coveredTimer.remove();
+
+                                    let rectangle = context.add.rectangle(context.sys.canvas.width / 2, context.sys.canvas.height / 2, context.sys.canvas.width, context.sys.canvas.height, 0x000000);
+                                    rectangle.setAlpha(0.5);
+
+                                    let text = context.add.text(context.sys.canvas.width / 2, context.sys.canvas.height / 2, 'Good job!\nHere comes the next round.', { fontSize: '50px', fill: '#FFFF00', align: 'center', fontWeight: 'bold' });
+                                    text.setOrigin(0.5, 0.5);
+
+                                    context.time.delayedCall(5000, () => {
+                                        context.children.removeAll();
+                                        context.startGame(context);
+                                    });
+                                }
+                            } else {
+                                context.time.delayedCall(1500, () => {
+                                    context.clickedCards[0].visible = true;
+                                    context.clickedCards[1].visible = true;
+                                    context.clickedCards = [];
+                                    context.cardBackSprites.forEach(sprite => sprite.setInteractive());
+                                });
+                            }
+                        }
+                    }
+                });
+
                 context.cardBackSprites.push(cardBack);
+            }
+        }
 
-                image.setData('key', imageKey);
-                image.visible = true;
+        var uncoveredTimer = context.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                countdownUncovered--;
+                countdownText.setText('Countdown: ' + countdownUncovered);
 
-                context.time.delayedCall(countdownUncovered * 1000, () => {
-                    image.visible = false;
-                    cardBack.visible = true;
+                if(countdownUncovered <= 0) {
                     memorizeText.visible = false;
                     clickPairsText.visible = true;
+                    context.cardBackSprites.forEach(sprite => sprite.visible = true);
 
-                    var timedEvent = context.time.addEvent({
+                    uncoveredTimer.remove();
+                    countdownText.setText('Countdown: ' + countdownCovered);
+
+                    context.coveredTimer = context.time.addEvent({
                         delay: 1000,
                         callback: () => {
                             countdownCovered--;
                             countdownText.setText('Countdown: ' + countdownCovered);
-                            if (countdownCovered <= 0) {
-                                context.endGame(context, totalPairsMatchedText, totalMatchedPairsText);
+
+                            if(countdownCovered <= 0) {
+                                context.coveredTimer.remove();
+                                context.children.removeAll(true);
+                                context.add.image(0, 0, 'background').setOrigin(0,0).setAlpha(0.85).setTint(0x808080).setScale(context.scaleX, context.scaleY);
+                                var finalScoreText = context.add.text(context.sys.canvas.width / 2, context.sys.canvas.height / 2, 'Final Score: ' + context.totalMatchedPairs + '\nPress ENTER to restart.', { fontSize: '50px', fill: '#ADD8E6', align: 'center', fontWeight: 'bold' });
+                                finalScoreText.setOrigin(0.5, 0.5);
+                                this.gameOver = true;
+                                this.ignoreClicks = true; // Set ignoreClicks to true when countdown reaches 0
                             }
                         },
-                        callbackScope: context,
                         loop: true
                     });
-                });
-            }
-        }
-
-        context.input.on('gameobjectdown', function (pointer, cardBack) {
-            if (context.ignoreClicks || context.gameOver) {
-                return;
-            }
-            context.handleCardClick(context, cardBack, countdownText, totalPairsMatchedText, totalMatchedPairsText);
-        });
-
-        context.input.on('pointerdown', () => {
-            console.log('Pointer down event registered');
-        });
-    }
-
-    handleCardClick(context, cardBack, countdownText, totalPairsMatchedText, totalMatchedPairsText) {
-        if (!context.ignoreClicks && context.clickedCards.length < 2) {
-            cardBack.visible = false;
-            context.clickedCards.push(cardBack);
-
-            if (context.clickedCards.length === 2) {
-                context.ignoreClicks = true;
-
-                if (context.clickedCards[0].getData('key') === context.clickedCards[1].getData('key')) {
-                    context.matchedPairs++;
-                    context.totalMatchedPairs++;
-                    context.clickedCards = [];
-                    context.ignoreClicks = false;
-
-                    if (context.matchedPairs === 8) {
-                        context.endGame(context, totalPairsMatchedText, totalMatchedPairsText);
-                    }
-                } else {
-                    context.time.delayedCall(1000, () => {
-                        context.clickedCards[0].visible = true;
-                        context.clickedCards[1].visible = true;
-                        context.clickedCards = [];
-                        context.ignoreClicks = false;
-                    });
                 }
-
-                totalPairsMatchedText.setText('Total Pairs Matched: ' + context.totalMatchedPairs);
-            }
-        }
-    }
-
-    endGame(context, totalPairsMatchedText, totalMatchedPairsText) {
-        context.gameOver = true;
-        context.ignoreClicks = true;
-
-        context.add.text(context.sys.canvas.width / 2, context.sys.canvas.height / 2, 'Game Over', { fontSize: '40px', fill: '#ff0000' }).setOrigin(0.5, 0.5);
-        context.add.text(context.sys.canvas.width / 2, context.sys.canvas.height / 2 + 50, 'Press Enter to Restart', { fontSize: '30px', fill: '#ffffff' }).setOrigin(0.5, 0.5);
-
-        totalPairsMatchedText.setText('Total Pairs Matched: ' + context.totalMatchedPairs);
+            },
+            loop: true
+        });
     }
 }
+
 
 const config = {
     type: Phaser.AUTO,
