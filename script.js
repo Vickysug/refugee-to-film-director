@@ -92,7 +92,7 @@ class Filmmemory extends Phaser.Scene {
         this.load.image('card back', 'https://play.rosebud.ai/assets/Retro TV.png?rIrX');
         this.load.image('clapper', 'https://play.rosebud.ai/assets/create%20a%20clapperboard.png?x1fp');
         this.load.image('camera', 'https://play.rosebud.ai/assets/create%20a%20filmset%20camera.png?rvdL');
-        this.load.image('megaphone', 'https://play.rosebud.ai/assets/megaphone.jpg?PgLS');
+        this.load.image('megaphone', 'https://play.rosebud.ai/assets/megaphone.jpg?HRyL');
         this.load.image('camera2', 'https://play.rosebud.ai/assets/camera.jpg?ZQmm');
         this.load.image('reel', 'https://play.rosebud.ai/assets/create a camera film reel.png?aZ6y');
         this.load.image('chair', 'https://play.rosebud.ai/assets/directors-chair.jpg?Z006');
