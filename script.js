@@ -47,9 +47,9 @@ class AnotherScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('billyWilder', 'https://play.rosebud.ai/assets/wilder.jpg?qP9V');
-        this.load.image('robertVas', 'https://play.rosebud.ai/assets/vas.jpg?7UXR');
-        this.load.image('fritzLang', 'https://play.rosebud.ai/assets/Lang.jfif?9Xbk');
+        this.load.image('billyWilder', 'https://play.rosebud.ai/assets/wilder.name.jpg?Mrvf');
+        this.load.image('robertVas', 'https://play.rosebud.ai/assets/vas.name.jpg?mJGP');
+        this.load.image('fritzLang', 'https://play.rosebud.ai/assets/Lang.name.png?6uFK');
     }
 
     create() {
