@@ -55,7 +55,7 @@ class AnotherScene extends Phaser.Scene {
     create() {
         const textLabel = this.add.text(20, 180, 'Billy Wilder, June 22 1906 to March 27 2002. Austrian-born. Moved to Hollywood in 1934.\n\n Received his first nomination for the Academy Award for Best Director with the film noir Double Indemnity (1944).\n\n\n Robert Vas, 3 March 1931 to 10 April 1978. Born in Hungary. \n Moved to England after the Hungarian uprising in 1956. \nMade his first film "Refuge England" in 1959. Also made a series of films for the BBC.\n\n\n Fritz Lang, December 5, 1890 to August 2 1976. Austrian-born.  \n Moved to Beverly Hills in 1936. His film "Metropolis" 1972 regarded as a masterpiece. ', { font: 'bold 20px Courier New', fill: '#ffffff', wordWrap: { width: 760, useAdvancedWrap: true } });
 
-        const textGame = this.add.text(20, 450, ' Play the game: Memorise pairs of film making items from history. When the cards are turned over, click the pairs and beat the timer!', { font: 'bold 20px Times New Roman', fill: '#34eb92', wordWrap: { width: 760, useAdvancedWrap: true } });
+        const textGame = this.add.text(20, 460, ' Play the game: Memorise pairs of film making items from history. When the cards are turned over, click the pairs and beat the timer!', { font: 'bold 18px Times New Roman', fill: '#34eb92', wordWrap: { width: 760, useAdvancedWrap: true } });
 
         this.add.image(200, 70, 'billyWilder').setScale(0.2);
         this.add.image(400, 70, 'robertVas').setScale(0.8);
